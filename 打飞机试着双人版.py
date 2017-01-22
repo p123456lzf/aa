@@ -217,7 +217,8 @@ enemies2 = pygame.sprite.Group()
 enemies3 = pygame.sprite.Group()
 
 # 存储被击毁的飞机，用来渲染击毁动画
-enemies_down = pygame.sprite.Group()
+enemies_down1 = pygame.sprite.Group()
+enemies_down2 = pygame.sprite.Group()
 
 # 初始化射击及敌机移动频率
 shoot_frequency = 0
@@ -330,7 +331,7 @@ while running:
         enemy.move()
         #3. 敌机与玩家飞机碰撞效果处理
         if pygame.sprite.collide_circle(enemy, player1):
-            enemies_down.add(enemy)
+            enemies_down1.add(enemy)
             enemies1.remove(enemy)
             player1.is_hit = True
             break
@@ -343,7 +344,7 @@ while running:
         enemy.move()
         #3. 敌机与玩家飞机碰撞效果处理
         if pygame.sprite.collide_circle(enemy, player2):
-            enemies_down.add(enemy)
+            enemies_down2.add(enemy)
             enemies1.remove(enemy)
             player2.is_hit = True
             break
@@ -356,7 +357,7 @@ while running:
         enemy.move()
         #3. 敌机与玩家飞机碰撞效果处理
         if pygame.sprite.collide_circle(enemy, player1):
-            enemies_down.add(enemy)
+            enemies_down1.add(enemy)
             enemies2.remove(enemy)
             player1.is_hit = True
             break
@@ -369,7 +370,7 @@ while running:
         enemy.move()
         #3. 敌机与玩家飞机碰撞效果处理
         if pygame.sprite.collide_circle(enemy, player1):
-            enemies_down.add(enemy)
+            enemies_down1.add(enemy)
             enemies1.remove(enemy)
             player1.is_hit = True
             break
@@ -382,7 +383,7 @@ while running:
         enemy.move()
         #3. 敌机与玩家飞机碰撞效果处理
         if pygame.sprite.collide_circle(enemy, player2):
-            enemies_down.add(enemy)
+            enemies_down2.add(enemy)
             enemies2.remove(enemy)
             player2.is_hit = True
             break
@@ -395,7 +396,7 @@ while running:
         enemy.move()
         #3. 敌机与玩家飞机碰撞效果处理
         if pygame.sprite.collide_circle(enemy, player2):
-            enemies_down.add(enemy)
+            enemies_down2.add(enemy)
             enemies2.remove(enemy)
             player2.is_hit = True
             break
@@ -408,37 +409,37 @@ while running:
     # 将被击中的敌机对象添加到击毁敌机 Group 中，用来渲染击毁动画
     enemies1_down = pygame.sprite.groupcollide(enemies1, player1.bullets, 1, 1)
     for enemy_down in enemies1_down:
-        enemies_down.add(enemy_down)
+        enemies_down1.add(enemy_down)
 
 #敌机被子弹击中效果处理
     # 将被击中的敌机对象添加到击毁敌机 Group 中，用来渲染击毁动画
     enemies2_down = pygame.sprite.groupcollide(enemies2, player1.bullets, 1, 1)
     for enemy_down in enemies2_down:
-        enemies_down.add(enemy_down)
+        enemies_down1.add(enemy_down)
 
 #敌机被子弹击中效果处理
     # 将被击中的敌机对象添加到击毁敌机 Group 中，用来渲染击毁动画
     enemies3_down = pygame.sprite.groupcollide(enemies3, player1.bullets, 1, 1)
     for enemy_down in enemies3_down:
-        enemies_down.add(enemy_down)
+        enemies_down1.add(enemy_down)
 
 #敌机被子弹击中效果处理
     # 将被击中的敌机对象添加到击毁敌机 Group 中，用来渲染击毁动画
     enemies1_down = pygame.sprite.groupcollide(enemies1, player2.bullets, 1, 1)
     for enemy_down in enemies1_down:
-        enemies_down.add(enemy_down)
+        enemies_down2.add(enemy_down)
 
 #敌机被子弹击中效果处理
     # 将被击中的敌机对象添加到击毁敌机 Group 中，用来渲染击毁动画
     enemies2_down = pygame.sprite.groupcollide(enemies2, player2.bullets, 1, 1)
     for enemy_down in enemies2_down:
-        enemies_down.add(enemy_down)
+        enemies_down2.add(enemy_down)
 
 #敌机被子弹击中效果处理
     # 将被击中的敌机对象添加到击毁敌机 Group 中，用来渲染击毁动画
     enemies3_down = pygame.sprite.groupcollide(enemies3, player2.bullets, 1, 1)
     for enemy_down in enemies3_down:
-        enemies_down.add(enemy_down)
+        enemies_down2.add(enemy_down)
 
 
 
@@ -456,6 +457,9 @@ while running:
         player1.img_index = player1_down_index / 50
         screen.blit(player1.image[player1.img_index], player1.rect)
         player1_down_index += 8
+        #玩家死后移除玩家飞机
+        player1.rect.top = 1000
+        player1.rect.left = 680
         if player1_down_index > 298:
             player1_down_index = 299
             # 击中效果处理完成后游戏结束
@@ -470,6 +474,9 @@ while running:
         player2.img_index = player2_down_index / 50
         screen.blit(player2.image[player2.img_index], player2.rect)
         player2_down_index += 8
+        #玩家死后移除玩家飞机
+        player2.rect.top = 1000
+        player2.rect.left = 680
         if player2_down_index > 298:
             player2_down_index = 299
             # 击中效果处理完成后游戏结束
@@ -477,13 +484,24 @@ while running:
     if player2_down_index == 299 and player1_down_index == 299:
         running = False
 
+
 # 敌机被子弹击中效果显示
-    for enemy_down in enemies_down:
+    for enemy_down in enemies_down1:
         if enemy_down.down_index == 0:
             pass
         if enemy_down.down_index > 7:
-            enemies_down.remove(enemy_down)
-            score += 1
+            enemies_down1.remove(enemy_down)
+            score1 += 1
+            continue
+        screen.blit(enemy_down.down_imgs[enemy_down.down_index / 2], enemy_down.rect)
+        enemy_down.down_index += 1
+
+    for enemy_down in enemies_down2:
+        if enemy_down.down_index == 0:
+            pass
+        if enemy_down.down_index > 7:
+            enemies_down2.remove(enemy_down)
+            score2 += 1
             continue
         screen.blit(enemy_down.down_imgs[enemy_down.down_index / 2], enemy_down.rect)
         enemy_down.down_index += 1
@@ -497,12 +515,18 @@ while running:
     enemies3.draw(screen)
 
     # 绘制得分
-    score_font = pygame.font.Font(None, 36)
-    score_text = score_font.render(str(score), True, (128, 128, 128))
-    text_rect = score_text.get_rect()
+    score1_font = pygame.font.Font(None, 36)
+    score1_text = score1_font.render(str(score1), True, (128, 128, 128))
+    text_rect = score1_text.get_rect()
     text_rect.topleft = [10, 10]
-    screen.blit(score_text, text_rect)
+    screen.blit(score1_text, text_rect)
 
+    score2_font = pygame.font.Font(None, 36)
+    score2_text = score2_font.render(str(score2), True, (128, 128, 128))
+    text_rect = score2_text.get_rect()
+    text_rect.topleft = [400, 10]
+    screen.blit(score2_text, text_rect)
+    
     # 更新屏幕
     pygame.display.update()
     
@@ -537,12 +561,17 @@ while running:
 
 # 游戏 Game Over 后显示最终得分
 font = pygame.font.Font(None, 48)
-text = font.render('Score: '+ str(score), True, (255, 0, 0))
-text_rect = text.get_rect()
-text_rect.centerx = screen.get_rect().centerx
-text_rect.centery = screen.get_rect().centery + 24
+text1 = font.render('Score1: '+ str(score1), True, (255, 0, 0))
+text2 = font.render('Score2: '+ str(score2), True, (255, 0, 0))
+text1_rect = text1.get_rect()
+text1_rect.centerx = screen.get_rect().centerx
+text1_rect.centery = screen.get_rect().centery + 24
+text2_rect = text2.get_rect()
+text2_rect.centerx = screen.get_rect().centerx
+text2_rect.centery = screen.get_rect().centery + 72
 screen.blit(game_over, (0, 0))
-screen.blit(text, text_rect)
+screen.blit(text1, text1_rect)
+screen.blit(text2, text2_rect)
 
 # 显示得分并处理游戏退出
 while 1:
