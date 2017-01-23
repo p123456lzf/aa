@@ -457,11 +457,11 @@ while running:
         player1.img_index = player1_down_index / 50
         screen.blit(player1.image[player1.img_index], player1.rect)
         player1_down_index += 8
-        #玩家死后移除玩家飞机
-        player1.rect.top = 1000
-        player1.rect.left = 680
         if player1_down_index > 298:
             player1_down_index = 299
+            #玩家死后移除玩家飞机
+            player1.rect.top = 1000
+            player1.rect.left = 680
             # 击中效果处理完成后游戏结束
 #            running = False
 
@@ -474,11 +474,11 @@ while running:
         player2.img_index = player2_down_index / 50
         screen.blit(player2.image[player2.img_index], player2.rect)
         player2_down_index += 8
-        #玩家死后移除玩家飞机
-        player2.rect.top = 1000
-        player2.rect.left = 680
         if player2_down_index > 298:
             player2_down_index = 299
+            #玩家死后移除玩家飞机
+            player2.rect.top = 1000
+            player2.rect.left = 680
             # 击中效果处理完成后游戏结束
 #            running = False
     if player2_down_index == 299 and player1_down_index == 299:
